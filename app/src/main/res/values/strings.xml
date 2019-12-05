@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Map application</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_button_map">Map</string>
+    <string name="title_button_history">History</string>
+    <string name="element_text">text</string>
+    <string name="no_information_available">No information available</string>
+    <string name="textview">TextView</string>
+    <string name="update">Update</string>
+</resources>
