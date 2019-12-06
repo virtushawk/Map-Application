@@ -24,18 +24,18 @@ public class HistoryFragment extends Fragment {
         LINEAR_LAYOUT_MANAGER
     }
 
-    private LayoutManagerType mCurrentLayoutManagerType;
+    private LayoutManagerType currentLayoutManagerType;
 
-    private RecyclerView mRecyclerView;
-    private Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<String> Data;
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<String> data;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Data = new ArrayList<>();
+        data = new ArrayList<>();
 
     }
 
@@ -49,21 +49,21 @@ public class HistoryFragment extends Fragment {
         initDataset(temp);
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         rootView.setTag(TAG);
-        mRecyclerView = rootView.findViewById(R.id.recyclerView);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+        recyclerView = rootView.findViewById(R.id.recyclerView);
+        layoutManager = new LinearLayoutManager(getActivity());
+        currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         if (savedInstanceState != null) {
 
-            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
+            currentLayoutManagerType = (LayoutManagerType) savedInstanceState
                     .getSerializable(KEY_LAYOUT_MANAGER);
         }
-        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
-        mAdapter = new Adapter(Data);
-        mRecyclerView.setAdapter(mAdapter);
+        setRecyclerViewLayoutManager(currentLayoutManagerType);
+        recyclerViewAdapter = new RecyclerViewAdapter(data);
+        recyclerView.setAdapter(recyclerViewAdapter);
         setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER);
-        SwipeController swipeController = new SwipeController(mAdapter);
+        SwipeController swipeController = new SwipeController(recyclerViewAdapter);
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(mRecyclerView);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
         return rootView;
 
     }
@@ -71,28 +71,26 @@ public class HistoryFragment extends Fragment {
     private void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
         int scrollPosition = 0;
 
-        if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+        if (recyclerView.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
                     .findFirstCompletelyVisibleItemPosition();
         }
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.scrollToPosition(scrollPosition);
-
-
+        layoutManager = new LinearLayoutManager(getActivity());
+        currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.scrollToPosition(scrollPosition);
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
-        savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
+        savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, currentLayoutManagerType);
         super.onSaveInstanceState(savedInstanceState);
     }
 
     private void initDataset(ArrayList<String> mlist) {
-        Data = new ArrayList<>();
-        Data.addAll(mlist);
+        data = new ArrayList<>();
+        data.addAll(mlist);
     }
 
 }

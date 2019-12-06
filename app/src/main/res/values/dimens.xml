@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="addressTextSize">24sp</dimen>
+    <dimen name="updateAtTextSize">14sp</dimen>
+    <dimen name="statusTextSize">18sp</dimen>
+    <dimen name="tempTextSize">90sp</dimen>
+</resources>

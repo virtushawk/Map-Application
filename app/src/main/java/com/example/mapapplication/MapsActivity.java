@@ -24,12 +24,16 @@ import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnInfoWindowClickListener,OnMapReadyCallback {
 
-    public static final String EXTRA_MESSAGE = "message" ;
-    private GoogleMap mMap;
+    public static final String extra_message = "message" ;
+    public static final String code = "valuesArray";
+    private GoogleMap map;
     private Fragment historyfragment = new HistoryFragment();
-    private  ArrayList <String> Data;
+    private  ArrayList <String> data;
     private ArrayList <LatLng> coords;
     private Button button;
+    private int Latitude = 181;
+    private int Longitude = 71;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,16 +47,16 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnInfoWi
         BottomNavigationView bottomNav =findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        Data = new ArrayList<>();
+        data = new ArrayList<>();
 
-        CoordGenerator();
+        coordGenerator();
 
        button = findViewById(R.id.RefreshButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                CoordGenerator();
-                mMap.clear();
-                onMapReady(mMap);
+                coordGenerator();
+                map.clear();
+                onMapReady(map);
             }
         });
     }
@@ -63,14 +67,14 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnInfoWi
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("valuesArray", Data);
+                    bundle.putSerializable(code, data);
                     historyfragment.setArguments(bundle);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             historyfragment).hide(historyfragment).commit();
                     switch (menuItem.getItemId())
                     {
                         case R.id.nav_map:
-                            Data = new ArrayList<>();
+                            data = new ArrayList<>();
                             button.setVisibility(View.VISIBLE);
                             break;
                         case R.id.nav_history:
@@ -89,31 +93,31 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnInfoWi
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        map = googleMap;
         for (int i = 0; i<15;i++)
         {
-            mMap.addMarker(new MarkerOptions().position(coords.get(i)).title("Weather information"));
+            map.addMarker(new MarkerOptions().position(coords.get(i)).title(getString(R.string.weather_information)));
         }
-        mMap.setOnInfoWindowClickListener(this);
+        map.setOnInfoWindowClickListener(this);
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
 
-        Data.add(marker.getPosition().toString());
-        Intent intent = new Intent(this, DisplayInfo.class);
+        data.add(marker.getPosition().toString());
+        Intent intent = new Intent(this, WeatherInfoActivity.class);
         String message =marker.getPosition().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
+        intent.putExtra(extra_message, message);
         startActivity(intent);
     }
 
-    public void CoordGenerator()
+    public void coordGenerator()
     {
         ArrayList <LatLng> temp = new ArrayList<>();
 
         for(int i =0 ; i<15;i++)
         {
-            LatLng latlng = new LatLng((Math.random()*((180)+1)),(Math.random()*((70)+1)));
+            LatLng latlng = new LatLng(Math.random()* Latitude,Math.random()* Longitude);
             temp.add(latlng);
         }
         coords = temp;

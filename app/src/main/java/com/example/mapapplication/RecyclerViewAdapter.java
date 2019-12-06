@@ -11,16 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
-import static com.example.mapapplication.MapsActivity.EXTRA_MESSAGE;
+import static com.example.mapapplication.MapsActivity.extra_message;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "CustomAdapter";
-    private static ArrayList <String> Data = new ArrayList<>();
+    private static ArrayList <String> data = new ArrayList<>();
 
-    Adapter(ArrayList<String> DataSet) {
+    RecyclerViewAdapter(ArrayList<String> DataSet) {
 
-        Data.addAll(DataSet);
+        data.addAll(DataSet);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -36,9 +35,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
                     int position =getAdapterPosition();
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, DisplayInfo.class);
-                    String message = Data.get(position);
-                    intent.putExtra(EXTRA_MESSAGE, message);
+                    Intent intent = new Intent(context, WeatherInfoActivity.class);
+                    String message = data.get(position);
+                    intent.putExtra(extra_message, message);
                     context.startActivity(intent);
 
                 }
@@ -63,15 +62,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.getTextView().setText(Data.get(position));
+        viewHolder.getTextView().setText(data.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return Data.size();
+        return data.size();
     }
 
     static void deleteItem(int position) {
-        Data.remove(position);
+        data.remove(position);
     }
 }

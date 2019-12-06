@@ -10,10 +10,10 @@ import static androidx.recyclerview.widget.ItemTouchHelper.RIGHT;
 class SwipeController extends ItemTouchHelper.Callback {
 
 
-    private final Adapter mAdapter;
+    private final RecyclerViewAdapter recyclerViewAdapter;
 
-    SwipeController(Adapter adapter) {
-        mAdapter = adapter;
+    SwipeController(RecyclerViewAdapter recyclerViewAdapter) {
+        this.recyclerViewAdapter = recyclerViewAdapter;
     }
 
 
@@ -31,8 +31,8 @@ class SwipeController extends ItemTouchHelper.Callback {
     @Override
     public  void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getAdapterPosition();
-        Adapter.deleteItem(position);
-        mAdapter.notifyItemRemoved(position);
+        RecyclerViewAdapter.deleteItem(position);
+        recyclerViewAdapter.notifyItemRemoved(position);
 
     }
 }

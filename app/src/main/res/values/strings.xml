@@ -7,4 +7,11 @@
     <string name="no_information_available">No information available</string>
     <string name="textview">TextView</string>
     <string name="update">Update</string>
+    <string name="weather_information">Weather information</string>
+    <string name="internet_error">Error occurred while getting request!</string>
+    <string name="addressText">%1$s,%2$s</string>
+
+    <string name="tempText">%1$s°C</string>
+    <string name="tempMinText">Min Temp:%1$s°C</string>
+   <string name="tempMaxText">Max Temp:%1$s°C</string>
 </resources>
