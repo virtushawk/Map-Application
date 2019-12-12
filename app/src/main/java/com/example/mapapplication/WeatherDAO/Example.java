@@ -19,7 +19,7 @@ public class Example {
     private String base;
     @SerializedName("main")
     @Expose
-    private Main main;
+    private Temperature temperature;
     @SerializedName("wind")
     @Expose
     private Wind wind;
@@ -69,12 +69,12 @@ public class Example {
         this.base = base;
     }
 
-    public Main getMain() {
-        return main;
+    public Temperature getTemperature() {
+        return temperature;
     }
 
-    public void setMain(Main main) {
-        this.main = main;
+    public void setTemperature(Temperature temperature) {
+        this.temperature = temperature;
     }
 
     public Wind getWind() {

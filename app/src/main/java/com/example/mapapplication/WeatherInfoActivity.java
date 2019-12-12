@@ -57,13 +57,13 @@ public class WeatherInfoActivity extends AppCompatActivity {
                     public void onResponse(@NonNull Call<Example> call, @NonNull Response<Example> response) {
                         Example example = response.body();
                         assert example != null;
-                        long updatedAt = example.getDt();
+                        long updatedAt = example.getDt()*1000;
                         addressTxt.setText(getString(R.string.addressText,example.getName(),example.getSys().getCountry()));
-                        updatedAtTxt.setText("Updated at: " + new SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH).format(new Date(updatedAt * 1000)));
-                        statusTxt.setText(example.getWeather().get(0).getDescription().toUpperCase());
-                        tempTxt.setText(getString(R.string.tempText,example.getMain().getTemp().toString()));
-                        tempMinTxt.setText(getString(R.string.tempMinText,example.getMain().getTempMin().toString()));
-                        tempMaxTxt.setText(getString(R.string.tempMaxText,example.getMain().getTempMax().toString()));
+                        updatedAtTxt.setText(String.format("Updated at: %s", new SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH).format(new Date(updatedAt))));
+                        statusTxt.setText(getString(R.string.tempStatusText,example.getWeather().get(0).getDescription().toUpperCase()));
+                        tempTxt.setText(getString(R.string.tempText,example.getTemperature().getTemp().toString()));
+                        tempMinTxt.setText(getString(R.string.tempMinText,example.getTemperature().getTempMin().toString()));
+                        tempMaxTxt.setText(getString(R.string.tempMaxText,example.getTemperature().getTempMax().toString()));
 
                     }
 

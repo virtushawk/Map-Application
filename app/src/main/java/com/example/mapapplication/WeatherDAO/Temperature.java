@@ -4,7 +4,7 @@ package com.example.mapapplication.WeatherDAO;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Main {
+public class Temperature {
 
     @SerializedName("temp")
     @Expose

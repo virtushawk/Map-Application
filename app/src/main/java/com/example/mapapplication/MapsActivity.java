@@ -3,62 +3,39 @@ package com.example.mapapplication;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 
-public class MapsActivity extends FragmentActivity implements GoogleMap.OnInfoWindowClickListener,OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity {
 
     public static final String extra_message = "message" ;
-    public static final String code = "valuesArray";
-    private GoogleMap map;
+    public static final String codes = "valuesArrays";
     private Fragment historyfragment = new HistoryFragment();
+    private Fragment mapfragment = new MapFragment();
     private  ArrayList <String> data;
-    private ArrayList <LatLng> coords;
-    private Button button;
-    private int Latitude = 181;
-    private int Longitude = 71;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
+        data = new ArrayList<>();
+        saveArrayList(data,codes);
 
         BottomNavigationView bottomNav =findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        data = new ArrayList<>();
 
-        coordGenerator();
-
-       button = findViewById(R.id.RefreshButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                coordGenerator();
-                map.clear();
-                onMapReady(map);
-            }
-        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -66,24 +43,14 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnInfoWi
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(code, data);
-                    historyfragment.setArguments(bundle);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            historyfragment).hide(historyfragment).commit();
                     switch (menuItem.getItemId())
                     {
                         case R.id.nav_map:
-                            data = new ArrayList<>();
-                            button.setVisibility(View.VISIBLE);
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mapfragment).commit();
                             break;
                         case R.id.nav_history:
-                            final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                            ft.detach(historyfragment);
-                            ft.attach(historyfragment);
-                            button.setVisibility(View.GONE);
-                            ft.show(historyfragment);
-                            ft.commit();
+                            getSupportFragmentManager().beginTransaction()
+                                  .replace(R.id.fragment_container,historyfragment).commit();
                             break;
                     }
 
@@ -91,36 +58,23 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnInfoWi
                 }
             };
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        for (int i = 0; i<15;i++)
-        {
-            map.addMarker(new MarkerOptions().position(coords.get(i)).title(getString(R.string.weather_information)));
-        }
-        map.setOnInfoWindowClickListener(this);
+    public void saveArrayList(ArrayList<String> coords, String codes){
+        Context context = getApplicationContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(coords);
+        editor.putString(codes, json);
+        editor.apply();
     }
 
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-
-        data.add(marker.getPosition().toString());
-        Intent intent = new Intent(this, WeatherInfoActivity.class);
-        String message =marker.getPosition().toString();
-        intent.putExtra(extra_message, message);
-        startActivity(intent);
-    }
-
-    public void coordGenerator()
-    {
-        ArrayList <LatLng> temp = new ArrayList<>();
-
-        for(int i =0 ; i<15;i++)
-        {
-            LatLng latlng = new LatLng(Math.random()* Latitude,Math.random()* Longitude);
-            temp.add(latlng);
-        }
-        coords = temp;
+    public ArrayList<String> getArrayList(String key){
+       Context context = getApplicationContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Gson gson = new Gson();
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        return gson.fromJson(json, type);
     }
 
 }

@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
+import static com.example.mapapplication.MapsActivity.codes;
 
 public class HistoryFragment extends Fragment {
 
@@ -43,10 +46,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        assert getArguments() != null;
-        ArrayList <String> temp =getArguments().getStringArrayList("valuesArray");
-        assert temp != null;
-        initDataset(temp);
+
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         rootView.setTag(TAG);
         recyclerView = rootView.findViewById(R.id.recyclerView);
@@ -58,9 +58,10 @@ public class HistoryFragment extends Fragment {
                     .getSerializable(KEY_LAYOUT_MANAGER);
         }
         setRecyclerViewLayoutManager(currentLayoutManagerType);
-        recyclerViewAdapter = new RecyclerViewAdapter(data);
+        recyclerViewAdapter = new RecyclerViewAdapter(((MapsActivity) Objects.requireNonNull(getActivity())).getArrayList(codes));
+        data= new ArrayList<>();
+        ((MapsActivity)getActivity()).saveArrayList(data,codes);
         recyclerView.setAdapter(recyclerViewAdapter);
-        setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER);
         SwipeController swipeController = new SwipeController(recyclerViewAdapter);
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
         itemTouchhelper.attachToRecyclerView(recyclerView);
@@ -86,11 +87,6 @@ public class HistoryFragment extends Fragment {
 
         savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, currentLayoutManagerType);
         super.onSaveInstanceState(savedInstanceState);
-    }
-
-    private void initDataset(ArrayList<String> mlist) {
-        data = new ArrayList<>();
-        data.addAll(mlist);
     }
 
 }
