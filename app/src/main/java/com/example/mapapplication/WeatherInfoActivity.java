@@ -6,11 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.mapapplication.WeatherDAO.Example;
+import com.example.mapapplication.data.models.Example;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +49,8 @@ public class WeatherInfoActivity extends AppCompatActivity {
         tempTxt = findViewById(R.id.temp);
         tempMinTxt = findViewById(R.id.tempMin);
         tempMaxTxt = findViewById(R.id.tempMax);
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
         NetworkService.getInstance()
                 .getJSONApi()

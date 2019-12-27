@@ -16,9 +16,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private static ArrayList <String> data = new ArrayList<>();
 
-    RecyclerViewAdapter(ArrayList<String> DataSet) {
+    RecyclerViewAdapter(ArrayList<String> dataSet) {
 
-        data.addAll(DataSet);
+        data.addAll(0,dataSet);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

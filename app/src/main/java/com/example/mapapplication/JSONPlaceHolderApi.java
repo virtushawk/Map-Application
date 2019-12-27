@@ -1,6 +1,6 @@
 package com.example.mapapplication;
 
-import com.example.mapapplication.WeatherDAO.Example;
+import com.example.mapapplication.data.models.Example;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

@@ -10,10 +10,8 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -76,13 +74,15 @@ public class MapFragment extends Fragment implements  GoogleMap.OnInfoWindowClic
     @Override
     public void onInfoWindowClick(Marker marker) {
 
-        data.add(marker.getPosition().toString());
         Intent intent = new Intent(Objects.requireNonNull(getActivity()).getBaseContext(),
                     WeatherInfoActivity.class);
         String message =marker.getPosition().toString();
         intent.putExtra(extra_message, message);
         startActivity(intent);
+        data= ((MapsActivity)getActivity()).getArrayList(codes);
+        data.add(marker.getPosition().toString());
         ((MapsActivity)getActivity()).saveArrayList(data,codes);
+        data=new ArrayList<>();
 
 
     }

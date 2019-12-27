@@ -1,5 +1,5 @@
 
-package com.example.mapapplication.WeatherDAO;
+package com.example.mapapplication.data.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

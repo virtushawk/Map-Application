@@ -31,9 +31,10 @@ public class MapsActivity extends FragmentActivity {
         setContentView(R.layout.activity_maps);
         data = new ArrayList<>();
         saveArrayList(data,codes);
-
         BottomNavigationView bottomNav =findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,historyfragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,mapfragment).commit();
 
 
     }
@@ -46,11 +47,13 @@ public class MapsActivity extends FragmentActivity {
                     switch (menuItem.getItemId())
                     {
                         case R.id.nav_map:
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mapfragment).commit();
+                            getSupportFragmentManager().beginTransaction().
+                                    hide(historyfragment).show(mapfragment).commit();
                             break;
                         case R.id.nav_history:
-                            getSupportFragmentManager().beginTransaction()
-                                  .replace(R.id.fragment_container,historyfragment).commit();
+                            getSupportFragmentManager().beginTransaction().
+                                    detach(historyfragment).attach(historyfragment).hide(mapfragment)
+                                    .show(historyfragment).commit();
                             break;
                     }
 
